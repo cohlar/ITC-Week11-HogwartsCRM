@@ -1,11 +1,11 @@
-from flask import Flask
-import lib.hogwarts as hogwarts
+from flask import Flask, render_template
+from lib import hogwarts
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Index'
+    return render_template('index.html')
     
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
