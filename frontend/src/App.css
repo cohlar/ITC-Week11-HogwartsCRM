@@ -1,38 +1,81 @@
+:root {
+  --bordeaux: rgb(116, 0, 1);
+  --red: rgb(174, 0, 1);
+  --yellow: rgb(238, 186, 48);
+  --sand: rgb(211, 166, 37);
+  --black: rgb(0, 0, 0);
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:focus {
+  outline: none;
+}
+
+header {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 70px;
+  background: var(--red);
+}
+
+header img {
+  height: 80%;
+}
+
+#content {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+}
+
+nav {
+  width: 200px;
   color: white;
+  background: var(--sand);
 }
 
-.App-link {
-  color: #61dafb;
+nav .nav-element {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 70px;
+  border-bottom: 1px solid white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+nav .nav-element:hover, nav .nav-element.active {
+  color: rgba(0,0,0,.8);
+  background: var(--yellow);
+}
+
+nav .nav-element:active {
+  transform: scale(1.01);
+}
+
+nav .nav-element .nav-icon {
+  width: 30px;
+  margin-right: 15px;
+}
+
+main {
+  flex-grow: 1;
+}
+
+main .success {
+  color: green;
+}
+
+main .error {
+  color: red;
 }
