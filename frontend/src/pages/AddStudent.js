@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createStudent } from '../lib/api.js'
+import { createStudent } from '../lib/api.js';
 
 function AddStudent() {
     const [firstname, setFirstname] = useState('');
@@ -36,7 +36,7 @@ function AddStudent() {
             setFirstname('');
             setLastname('');
         }
-        catch(error) {
+        catch (error) {
             setErrorMessage();
             console.log(error.toString());
         }

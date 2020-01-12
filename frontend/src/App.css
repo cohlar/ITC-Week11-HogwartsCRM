@@ -70,6 +70,7 @@ nav .nav-element .nav-icon {
 
 main {
   flex-grow: 1;
+  padding: 20px 20px;
 }
 
 main .success {

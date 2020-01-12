@@ -1,5 +1,5 @@
 import React from 'react';
-import NavItem from './NavItem.js'
+import NavItem from './NavItem.js';
 
 const navList = [
     { 'name': 'Dashboard',      'imgName': 'dashboard.png',     'path': '/'             },

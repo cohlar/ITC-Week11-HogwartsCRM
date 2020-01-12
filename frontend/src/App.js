@@ -5,13 +5,13 @@ import {
   Route,
 } from 'react-router-dom';
 import './App.css';
-import Dashboard from './pages/Dashboard.js'
-import Students from './pages/Students.js'
-import ViewStudent from './pages/ViewStudent'
-import AddStudent from './pages/AddStudent.js'
-import Header from './components/Header.js'
-import SideNav from './components/SideNav.js'
-import Inexisting from './components/Inexisting.js'
+import Dashboard from './pages/Dashboard.js';
+import Students from './pages/Students.js';
+import ViewStudent from './pages/ViewStudent';
+import AddStudent from './pages/AddStudent.js';
+import Header from './components/Header.js';
+import SideNav from './components/SideNav.js';
+import Inexisting from './components/Inexisting.js';
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
             <Route path='/students'>
               <Students />
             </Route>
-            <Route path='/view-student'>
+            <Route path='/view-student/:id'>
               <ViewStudent />
             </Route>
             <Route path='/add-student'>
