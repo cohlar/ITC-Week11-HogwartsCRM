@@ -1,35 +1,58 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 function StudentsList(props) {
     const { students } = props;
+
+    const StyledTableCell = withStyles(theme => ({
+        head: {
+            backgroundColor: theme.palette.common.black,
+            color: theme.palette.common.white,
+        },
+        body: {
+            fontSize: 14,
+        },
+    }))(TableCell);
+
+    const StyledTableRow = withStyles(theme => ({
+        root: {
+            '&:nth-of-type(odd)': {
+                backgroundColor: theme.palette.background.default,
+            },
+        },
+    }))(TableRow);
 
     return (
         <TableContainer component={Paper}>
             <Table aria-label="student-list">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Id</TableCell>
-                        <TableCell>First name</TableCell>
-                        <TableCell>Last name</TableCell>
+                        <StyledTableCell>Id</StyledTableCell>
+                        <StyledTableCell>First Name</StyledTableCell>
+                        <StyledTableCell>Last Name</StyledTableCell>
+                        <StyledTableCell>Created (UTC)</StyledTableCell>
+                        <StyledTableCell>Last Updated (UTC)</StyledTableCell>
+                        <StyledTableCell align='right'>Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {students.map(student => (
-                        <TableRow key={student.id}>
-                            <TableCell component="th" scope="row">
+                        <StyledTableRow key={student.id}>
+                            <StyledTableCell component="th" scope="row">
                                 {student.id}
-                            </TableCell>
-                            <TableCell>{student.firstname}</TableCell>
-                            <TableCell>{student.lastname}</TableCell>
-                            <TableCell>
-                                <NavLink to={'/view-student/' + student.id}>
+                            </StyledTableCell>
+                            <StyledTableCell>{student.firstname}</StyledTableCell>
+                            <StyledTableCell>{student.lastname}</StyledTableCell>
+                            <StyledTableCell>{student.created}</StyledTableCell>
+                            <StyledTableCell>{student.lastupdated}</StyledTableCell>
+                            <StyledTableCell align='right'>
+                                <NavLink to={'/view-student/' + student.id} className='view-student-link'>
                                     View Details
                                 </NavLink>
-                            </TableCell>
-                        </TableRow>
+                            </StyledTableCell>
+                        </StyledTableRow>
                     ))}
                 </TableBody>
             </Table>

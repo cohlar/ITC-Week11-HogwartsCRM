@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Grid, TextField, Button } from '@material-ui/core';
 import { createStudent } from '../lib/api.js';
+import MagicSkillForm from '../components/MagicSkillForm.js';
+import CoursesMultiSelect from '../components/CoursesMultiSelect.js';
 
 function AddStudent() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
-    const [userMessage, setUserMessage] = useState({ 'status': null, 'message': null })
+    const [magicSkills, setMagicSkills] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [userMessage, setUserMessage] = useState({ 'status': null, 'message': null });
 
     function setSuccessMessage() {
         setUserMessage({
@@ -14,7 +19,7 @@ function AddStudent() {
 
         setTimeout(() => {
             setUserMessage({ 'status': null, 'message': null })
-        }, 100000);
+        }, 5000);
     }
 
     function setErrorMessage() {
@@ -42,30 +47,67 @@ function AddStudent() {
         }
     }
 
+    useEffect(() => {
+        console.log(courses);
+    });
+
     return (
         <main>
             <form>
-                <label for="firstname">First name:</label>
-                <input id="firstname" name="firstname" type="text"
-                    onChange={(e) => setFirstname(e.target.value)}
-                />
+                <Grid container spacing={3}>
 
-                <label for="lastname">Last name:</label>
-                <input id="lastname" name="lastname" type="text"
-                    onChange={(e) => setLastname(e.target.value)}
-                />
+                    <Grid item xs={6}>
+                        <TextField id='firstname' label='First Name' onChange={(e) => setFirstname(e.target.value)} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField id='lastname' label='Last Name' onChange={(e) => setLastname(e.target.value)} />
+                    </Grid>
 
-                <button onClick={onSumbitHandler} type='submit'>
-                    Create
-                </button>
+                    <Grid item xs={12}>
+                        Magic Skills:
+                    </Grid>
+
+                    {magicSkills.map((skill, index) =>
+                        <MagicSkillForm key={index} />
+                    )}
+
+                    <Grid item xs={12}>
+                        <Button
+                            variant='contained'
+                            onClick={() => setMagicSkills([...magicSkills, { 'magic skill': null }])}
+                        >
+                            Add Magic Skill
+                        </Button>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        Interested in Courses:
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CoursesMultiSelect
+                            courses={courses}
+                            onChangeHandler={(e) => setCourses(e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button variant='contained' onClick={onSumbitHandler} type='submit'>
+                            Create
+                        </Button>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        {userMessage.status &&
+                            <div className={userMessage.status}>
+                                {userMessage.message}
+                            </div>
+                        }
+                    </Grid>
+
+                </Grid>
             </form>
-
-            {userMessage.status &&
-                <div className={userMessage.status}>
-                    {userMessage.message}
-                </div>
-            }
-        </main>
+        </main >
     );
 }
 

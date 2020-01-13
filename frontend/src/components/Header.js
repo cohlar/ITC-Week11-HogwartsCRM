@@ -4,7 +4,7 @@ function Header() {
     return (
         <header>
             <img src='/static/img/logo_white.png' alt='Hogwarts CRM Logo' />
-            <span>Something</span>
+            <span></span>
         </header>
     );
 }

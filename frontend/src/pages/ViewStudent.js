@@ -28,9 +28,32 @@ function ViewStudent(props) {
                 </>
             }
             {student &&
-                <p>
-                    {student.id} {student.firstname} {student.lastname}
-                </p>
+                <div>
+                    <p>
+                        ID: {student.id}
+                    </p>
+                    <p>
+                        First Name: {student.firstname}
+                    </p>
+                    <p>
+                        Last Name: {student.lastname}
+                    </p>
+                    <p>
+                        Existing Magic Skillz:
+                    </p>
+                    <p>
+                        Desired Magic Skillz:
+                    </p>
+                    <p>
+                        Interested in Courses:
+                    </p>
+                    <p>
+                        Created On: {student.created}
+                    </p>
+                    <p>
+                        Updated On: {student.lastupdated}
+                    </p>
+                </div>
             }
         </main>
     );

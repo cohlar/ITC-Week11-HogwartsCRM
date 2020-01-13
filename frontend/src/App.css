@@ -69,8 +69,15 @@ nav .nav-element .nav-icon {
 }
 
 main {
+  display: flex;
+  justify-content: center;
   flex-grow: 1;
-  padding: 20px 20px;
+  padding: 30px 30px;
+}
+
+main form {
+  min-width: 480px;
+  max-width: 800px;
 }
 
 main .success {
@@ -79,4 +86,12 @@ main .success {
 
 main .error {
   color: red;
+}
+
+.view-student-link {
+  color: white;
+  padding: 5px 5px;
+  background: var(--yellow);
+  border-radius: 5px;
+  box-shadow: lightgrey 2px 2px
 }
