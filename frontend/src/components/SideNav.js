@@ -4,8 +4,8 @@ import NavItem from './NavItem.js';
 const navList = [
     { 'name': 'Dashboard',      'imgName': 'dashboard.png',     'path': '/'             },
     { 'name': 'Students',       'imgName': 'student-list.png',  'path': '/students'     },
-    { 'name': 'View Student',   'imgName': 'view-student.png',  'path': '/view-student' },
-    { 'name': 'Add Student',    'imgName': 'add-student.png',   'path': '/add-student'  }
+    { 'name': 'Student Card',   'imgName': 'student-card.png',  'path': '/student-card' },
+    { 'name': 'Create Student', 'imgName': 'create-student.png','path': '/create-student'  }
 ]
 
 function SideNav() {

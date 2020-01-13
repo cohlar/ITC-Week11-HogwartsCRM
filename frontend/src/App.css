@@ -88,7 +88,7 @@ main .error {
   color: red;
 }
 
-.view-student-link {
+.student-card-link {
   color: white;
   padding: 5px 5px;
   background: var(--yellow);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getStudentById } from '../lib/api.js';
 
-function ViewStudent(props) {
+function StudentCard(props) {
     const { id } = useParams(); 
     const [student, setStudent] = useState(null);
 
@@ -18,7 +18,7 @@ function ViewStudent(props) {
             }
 
         })();
-    }, [])
+    }, [id])
 
     return (
         <main>
@@ -59,4 +59,4 @@ function ViewStudent(props) {
     );
 }
 
-export default ViewStudent;
+export default StudentCard;

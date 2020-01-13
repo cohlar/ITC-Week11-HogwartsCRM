@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 import { createStudent } from '../lib/api.js';
 import MagicSkillForm from '../components/MagicSkillForm.js';
 import CoursesMultiSelect from '../components/CoursesMultiSelect.js';
 
-function AddStudent() {
+function CreateStudent() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [magicSkills, setMagicSkills] = useState([]);
@@ -33,23 +33,25 @@ function AddStudent() {
         }, 5000);
     }
 
+    function setMagicSkillByIndex(index, new_skill) {
+        const skills = magicSkills;
+        skills[index] = new_skill;
+        setMagicSkills(skills);
+    }
+
     async function onSumbitHandler(e) {
         e.preventDefault();
         try {
-            await createStudent(firstname, lastname);
+            await createStudent(firstname, lastname, magicSkills, courses);
             setSuccessMessage();
             setFirstname('');
             setLastname('');
         }
         catch (error) {
             setErrorMessage();
-            console.log(error.toString());
+            console.log(error.response);
         }
     }
-
-    useEffect(() => {
-        console.log(courses);
-    });
 
     return (
         <main>
@@ -68,13 +70,13 @@ function AddStudent() {
                     </Grid>
 
                     {magicSkills.map((skill, index) =>
-                        <MagicSkillForm key={index} />
+                        <MagicSkillForm key={index} setParentMagicSkill={setMagicSkillByIndex} index={index} />
                     )}
 
                     <Grid item xs={12}>
                         <Button
                             variant='contained'
-                            onClick={() => setMagicSkills([...magicSkills, { 'magic skill': null }])}
+                            onClick={() => setMagicSkills([...magicSkills, {}])}
                         >
                             Add Magic Skill
                         </Button>
@@ -111,4 +113,4 @@ function AddStudent() {
     );
 }
 
-export default AddStudent;
+export default CreateStudent;

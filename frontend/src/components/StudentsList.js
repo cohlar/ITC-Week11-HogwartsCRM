@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 function StudentsList(props) {
     const { students } = props;
@@ -48,7 +48,7 @@ function StudentsList(props) {
                             <StyledTableCell>{student.created}</StyledTableCell>
                             <StyledTableCell>{student.lastupdated}</StyledTableCell>
                             <StyledTableCell align='right'>
-                                <NavLink to={'/view-student/' + student.id} className='view-student-link'>
+                                <NavLink to={'/student-card/' + student.id} className='student-card-link'>
                                     View Details
                                 </NavLink>
                             </StyledTableCell>

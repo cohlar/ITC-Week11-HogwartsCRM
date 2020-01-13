@@ -2,6 +2,10 @@ import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Input, Chip } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
+// Pass these from the server
+const course_list = ['Alchemy basics', 'Alchemy advanced', 'Magic for day-to-day life',
+    'Magic for medical professionals', 'Dating with magic']
+
 const useStyles = makeStyles(theme => ({
     formControl: {
         margin: theme.spacing(1),
@@ -31,10 +35,6 @@ const MenuProps = {
     },
 };
 
-// Pass these from the server
-const course_list = ['Alchemy basics', 'Alchemy advanced', 'Magic for day-to-day life',
-    'Magic for medical professionals', 'Dating with magic']
-
 function getStyles(course, courses, theme) {
     return {
         fontWeight:
@@ -62,7 +62,7 @@ function CoursesMultiSelect(props) {
                 onChange={onChangeHandler}
                 renderValue={selected => (
                     <div className={classes.chips}>
-                        {selected.map( (value) =>
+                        {selected.map((value) =>
                             <Chip key={value} label={value} className={classes.chip} />
                         )}
                     </div>

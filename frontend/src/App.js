@@ -7,8 +7,8 @@ import {
 import './App.css';
 import Dashboard from './pages/Dashboard.js';
 import Students from './pages/Students.js';
-import ViewStudent from './pages/ViewStudent';
-import AddStudent from './pages/AddStudent.js';
+import StudentCard from './pages/StudentCard.js';
+import CreateStudent from './pages/CreateStudent.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
 import Inexisting from './components/Inexisting.js';
@@ -30,11 +30,11 @@ function App() {
             <Route path='/students'>
               <Students />
             </Route>
-            <Route path='/view-student/:id'>
-              <ViewStudent />
+            <Route path='/student-card/:id'>
+              <StudentCard />
             </Route>
-            <Route path='/add-student'>
-              <AddStudent />
+            <Route path='/create-student'>
+              <CreateStudent />
             </Route>
             <Route path='/*'>
               <Inexisting />

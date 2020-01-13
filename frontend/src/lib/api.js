@@ -2,9 +2,15 @@ import axios from 'axios';
 
 const baseUrl = 'http://127.0.0.1:5000/';
 
-export function createStudent(firstname, lastname) {
+export function createStudent(firstname, lastname, magicSkills, courses) {
     const apiPath = 'api/students/create';
-    return axios.get(baseUrl + apiPath + '/' + firstname + '/' + lastname);
+    const payload = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'magicskills': magicSkills,
+        'courses': courses,
+    }
+    return axios.post(baseUrl + apiPath, payload);
 }
 
 export function getStudents() {
