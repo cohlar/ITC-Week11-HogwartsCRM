@@ -3,7 +3,7 @@ import React from 'react';
 function Header() {
     return (
         <header>
-            <img src='/static/img/logo_white.png' alt='Hogwarts CRM Logo' />
+            <img src={require('../img/logo_white.png')} alt='Hogwarts CRM Logo' />
             <span></span>
         </header>
     );

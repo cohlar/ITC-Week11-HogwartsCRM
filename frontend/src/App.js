@@ -7,7 +7,7 @@ import {
 import './App.css';
 import Dashboard from './pages/Dashboard.js';
 import Students from './pages/Students.js';
-import StudentCard from './pages/StudentCard.js';
+import StudentProfile from './pages/StudentProfile.js';
 import CreateStudent from './pages/CreateStudent.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
@@ -30,8 +30,8 @@ function App() {
             <Route path='/students'>
               <Students />
             </Route>
-            <Route path='/student-card/:id'>
-              <StudentCard />
+            <Route path='/student-profile/:id'>
+              <StudentProfile />
             </Route>
             <Route path='/create-student'>
               <CreateStudent />

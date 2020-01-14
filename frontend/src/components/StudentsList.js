@@ -48,7 +48,7 @@ function StudentsList(props) {
                             <StyledTableCell>{student.created}</StyledTableCell>
                             <StyledTableCell>{student.lastupdated}</StyledTableCell>
                             <StyledTableCell align='right'>
-                                <NavLink to={'/student-card/' + student.id} className='student-card-link'>
+                                <NavLink to={'/student-profile/' + student.id} className='student-card-link'>
                                     View Details
                                 </NavLink>
                             </StyledTableCell>

@@ -22,3 +22,13 @@ export function getStudentById(id) {
     const apiPath = 'api/students/get';
     return axios.get(baseUrl + apiPath + '/' + id);
 }
+
+export function getStudentSkill(id) {
+    const apiPath = 'api/studentskills/get';
+    return axios.get(baseUrl + apiPath + '/' + id);
+}
+
+export function getStudentCourse(id) {
+    const apiPath = 'api/studentcourses/get';
+    return axios.get(baseUrl + apiPath + '/' + id);
+}

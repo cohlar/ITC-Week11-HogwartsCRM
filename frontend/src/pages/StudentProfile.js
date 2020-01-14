@@ -1,22 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getStudentById } from '../lib/api.js';
+import { getStudentById, getStudentSkill, getStudentCourse } from '../lib/api.js';
 
-function StudentCard(props) {
+function StudentProfile(props) {
     const { id } = useParams(); 
     const [student, setStudent] = useState(null);
+    const [magicSkills, setMagicSKills] = useState([]);
+    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await getStudentById(id);
-                setStudent(response.data);
+                let response = await getStudentById(id);
+                const myStudent = response.data;
+                console.log(myStudent)
+                setStudent(myStudent);
+                for (const stutentSkillId of myStudent.magicskills) {
+                    response = await getStudentSkill(stutentSkillId);
+                    const myStudentSkill = response.data;
+                    console.log('myStudentSkill:', myStudentSkill)
+                    setMagicSKills([...magicSkills, myStudentSkill]);
+                }
+                for (const stutentCourseId of myStudent.courses) {
+                    response = await getStudentCourse(stutentCourseId);
+                    const myStudentCourse = response.data;
+                    console.log('myStudentCourse:', myStudentCourse)
+                    setCourses([...courses, myStudentCourse]);
+                }
             }
             catch (error) {
                 // setErrorMessage();
                 console.log(error.toString());
             }
-
         })();
     }, [id])
 
@@ -39,13 +54,13 @@ function StudentCard(props) {
                         Last Name: {student.lastname}
                     </p>
                     <p>
-                        Existing Magic Skillz:
+                        Existing Magic Skillz: {magicSkills.toString()}
                     </p>
                     <p>
                         Desired Magic Skillz:
                     </p>
                     <p>
-                        Interested in Courses:
+                        Interested in Courses: {courses.toString()}
                     </p>
                     <p>
                         Created On: {student.created}
@@ -59,4 +74,4 @@ function StudentCard(props) {
     );
 }
 
-export default StudentCard;
+export default StudentProfile;
