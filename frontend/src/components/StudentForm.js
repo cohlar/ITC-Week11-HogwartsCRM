@@ -5,8 +5,14 @@ import CoursesMultiSelect from './CoursesMultiSelect.js';
 import { StudentContext } from '../context/StudentContext.js'
 
 function StudentForm(props) {
-    const { disabled, onSubmitHandler } = props;
+    const { action, onSubmitHandler } = props;
     const parentContext = useContext(StudentContext);
+
+    function setIsDisabled(action) {
+        return action === 'view' ? true : false;
+    }
+
+    const isDisabled = setIsDisabled(action);
 
     return (
         <form>
@@ -16,9 +22,10 @@ function StudentForm(props) {
                     <TextField
                         id='firstname'
                         label='First Name'
+                        value={parentContext.firstname}
                         onChange={(e) => parentContext.setFirstname(e.target.value)}
-                        required={!disabled}
-                        disabled={disabled}
+                        required={!isDisabled}
+                        disabled={isDisabled}
                     />
                 </Grid>
 
@@ -26,21 +33,23 @@ function StudentForm(props) {
                     <TextField
                         id='lastname'
                         label='Last Name'
+                        value={parentContext.lastname}
                         onChange={(e) => parentContext.setLastname(e.target.value)}
-                        required={!disabled}
-                        disabled={disabled}
+                        required={!isDisabled}
+                        disabled={isDisabled}
                     />
                 </Grid>
 
                 <Grid item xs={12}>
                     Magic Skills:
-            </Grid>
+                </Grid>
 
                 {parentContext.magicSkills.map((skill, index) =>
                     <MagicSkillForm
                         key={index}
+                        skill={skill}
                         index={index}
-                        disabled={disabled}
+                        disabled={isDisabled}
                     />
                 )}
 
@@ -48,7 +57,7 @@ function StudentForm(props) {
                     <Button
                         variant='contained'
                         onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {}])}
-                        disabled={disabled}
+                        disabled={isDisabled}
                     >
                         Add Magic Skill
                         </Button>
@@ -61,19 +70,22 @@ function StudentForm(props) {
                 <Grid item xs={12}>
                     <CoursesMultiSelect
                         courses={parentContext.courses}
+                        value={parentContext.courses}
                         onChangeHandler={(e) => parentContext.setCourses(e.target.value)}
-                        disabled={disabled}
+                        disabled={isDisabled}
                     />
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Button
-                        variant='contained'
-                        onClick={onSubmitHandler}
-                        disabled={disabled}
-                    >
-                        Create
-                    </Button>
+                    {action === 'create' &&
+                        <Button
+                            variant='contained'
+                            onClick={onSubmitHandler}
+                            disabled={isDisabled}
+                        >
+                            Create
+                        </Button>
+                    }
                 </Grid>
 
                 <Grid item xs={12}>

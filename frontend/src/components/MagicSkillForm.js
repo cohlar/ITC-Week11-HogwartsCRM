@@ -7,12 +7,12 @@ const magicskills = ['Alchemy', 'Animation', 'Conjuror', 'Disintegration', 'Elem
     'Invulnerability', 'Necromancer', 'Omnipresent', 'Omniscient', 'Poison', 'Possession', 'Self-detonation', 'Summoning', 'Water breathing']
 
 function MagicSkillForm(props) {
-    const { index, disabled } = props;
+    const { skill, index, disabled: isDisabled } = props;
     const parentContext = useContext(StudentContext);
 
-    const [magicSkill, setMagicSkill] = useState('');
-    const [skillType, setSkillType] = useState('');
-    const [skillLevel, setSkillLevel] = useState(1);
+    const [magicSkill, setMagicSkill] = useState(skill.skill);
+    const [skillType, setSkillType] = useState(skill.skilltype);
+    const [skillLevel, setSkillLevel] = useState(skill.level);
 
     function setMagicSkillByIndex(index, new_skill) {
         const skills = parentContext.magicSkills;
@@ -35,9 +35,10 @@ function MagicSkillForm(props) {
                 <InputLabel id='magic-skill-label'>Magic skill</InputLabel>
                 <Select
                     labelId='magic-skill-label'
+                    value={magicSkill}
                     onChange={(e) => setMagicSkill(e.target.value)}
-                    required
-                    disabled={disabled}
+                    required={!isDisabled}
+                    disabled={isDisabled}
                 >
                     {magicskills.map((skill) =>
                         <MenuItem key={skill} value={skill}>{skill}</MenuItem>
@@ -49,13 +50,13 @@ function MagicSkillForm(props) {
                 <RadioGroup
                     aria-label='skill-type'
                     name='skill-type'
+                    value={skillType}
                     onChange={(e) => setSkillType(e.target.value)}
                     row
-                    required
-                    disabled={disabled}
+                    required={!isDisabled}
                 >
-                    <FormControlLabel value='existing' control={<Radio />} label='Existing' />
-                    <FormControlLabel value='desired' control={<Radio />} label='Desired' />
+                    <FormControlLabel value='existing' control={<Radio />} label='Existing' disabled={isDisabled} />
+                    <FormControlLabel value='desired' control={<Radio />} label='Desired' disabled={isDisabled} />
                 </RadioGroup>
             </Grid>
 
@@ -64,16 +65,16 @@ function MagicSkillForm(props) {
                     Skill Level
                 </Typography>
                 <Slider
+                    value={skillLevel}
                     onChange={(e, val) => setSkillLevel(val)}
-                    valueLabelDisplay='auto'
+                    valueLabelDisplay={isDisabled ? 'on' : 'auto'}
                     aria-labelledby='magic-skill-level-label'
                     min={1}
                     max={5}
                     step={1}
-                    defaultValue={skillLevel}
                     marks={true}
-                    required
-                    disabled={disabled}
+                    required={!isDisabled}
+                    disabled={isDisabled}
                 />
             </Grid>
         </>
