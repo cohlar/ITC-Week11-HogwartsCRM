@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Grid, FormControlLabel, InputLabel, Select, MenuItem, RadioGroup, Radio, Slider, Typography } from '@material-ui/core';
+import { StudentContext } from '../context/StudentContext.js'
 
 // Pass these from the server
 const magicskills = ['Alchemy', 'Animation', 'Conjuror', 'Disintegration', 'Elemental', 'Healing', 'Illusion', 'Immortality', 'Invisibility',
     'Invulnerability', 'Necromancer', 'Omnipresent', 'Omniscient', 'Poison', 'Possession', 'Self-detonation', 'Summoning', 'Water breathing']
 
 function MagicSkillForm(props) {
-    const { setParentMagicSkill, index } = props;
+    const { index, disabled } = props;
+    const parentContext = useContext(StudentContext);
 
     const [magicSkill, setMagicSkill] = useState('');
     const [skillType, setSkillType] = useState('');
-    const [skillLevel, setSkillLevel] = useState('');
+    const [skillLevel, setSkillLevel] = useState(1);
 
-    const handleChange = (value, callback) => {
-        callback(value);
+    function setMagicSkillByIndex(index, new_skill) {
+        const skills = parentContext.magicSkills;
+        skills[index] = new_skill;
+        parentContext.setMagicSkills(skills);
+    }
+
+    useEffect(() => {
         const new_skill = {
             'skill': magicSkill,
             'skilltype': skillType,
             'level': skillLevel,
         }
-        setParentMagicSkill(index, new_skill);
-    };
+        setMagicSkillByIndex(index, new_skill);
+    }, [magicSkill, skillType, skillLevel]);
 
     return (
         <>
@@ -28,7 +35,9 @@ function MagicSkillForm(props) {
                 <InputLabel id='magic-skill-label'>Magic skill</InputLabel>
                 <Select
                     labelId='magic-skill-label'
-                    onChange={(e) => handleChange(e.target.value, setMagicSkill)}
+                    onChange={(e) => setMagicSkill(e.target.value)}
+                    required
+                    disabled={disabled}
                 >
                     {magicskills.map((skill) =>
                         <MenuItem key={skill} value={skill}>{skill}</MenuItem>
@@ -40,8 +49,10 @@ function MagicSkillForm(props) {
                 <RadioGroup
                     aria-label='skill-type'
                     name='skill-type'
-                    onChange={(e) => handleChange(e.target.value, setSkillType)}
+                    onChange={(e) => setSkillType(e.target.value)}
                     row
+                    required
+                    disabled={disabled}
                 >
                     <FormControlLabel value='existing' control={<Radio />} label='Existing' />
                     <FormControlLabel value='desired' control={<Radio />} label='Desired' />
@@ -53,14 +64,16 @@ function MagicSkillForm(props) {
                     Skill Level
                 </Typography>
                 <Slider
-                    onChange={(e, val) => handleChange(val, setSkillLevel)}
+                    onChange={(e, val) => setSkillLevel(val)}
                     valueLabelDisplay='auto'
                     aria-labelledby='magic-skill-level-label'
                     min={1}
                     max={5}
                     step={1}
-                    defaultValue={1}
+                    defaultValue={skillLevel}
                     marks={true}
+                    required
+                    disabled={disabled}
                 />
             </Grid>
         </>

@@ -12,7 +12,7 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hogwarts.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/hogwarts.db'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -24,13 +24,13 @@ class Student(db.Model):
     lastname = db.Column(db.String(20), nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     lastupdated = db.Column(db.DateTime, default=datetime.utcnow)
-    magicskills = db.relationship('StudentSkill', backref='studentid', lazy=True)
-    courses = db.relationship('StudentCourse', backref='studentid', lazy=True)
+    magicskills = db.relationship('StudentSkill', lazy=True)
+    courses = db.relationship('StudentCourse', lazy=True)
 
 
 class StudentSkill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    studentid = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     skill = db.Column(db.String(50), nullable=False)
     skilltype = db.Column(db.String(20), nullable=False)
     level = db.Column(db.Integer, nullable=False)
@@ -38,36 +38,41 @@ class StudentSkill(db.Model):
 
 class StudentCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    studentid = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     course = db.Column(db.String(50), nullable=False)
+
+
+class StudentSkillSchema(ma.ModelSchema):
+    class Meta:
+        model = StudentSkill
+        # exclude = ('id',)
+
+
+class StudentCourseSchema(ma.ModelSchema):
+    class Meta:
+        model = StudentCourse
+        # exclude = ('id',)
 
 
 class StudentSchema(ma.ModelSchema):
     class Meta:
         model = Student
 
-
-class StudentSkillSchema(ma.ModelSchema):
-    class Meta:
-        model = StudentSkill
-
-
-class StudentCourseSchema(ma.ModelSchema):
-    class Meta:
-        model = StudentCourse
+    magicskills = ma.Nested(StudentSkillSchema, many=True)
+    courses = ma.Nested(StudentCourseSchema, many=True)
 
 
 @app.route('/api/magicskills/get')
 def getmagicskills():
     magicskills = ['Alchemy', 'Animation', 'Conjuror', 'Disintegration', 'Elemental', 'Healing', 'Illusion', 'Immortality', 'Invisibility',
-               'Invulnerability', 'Necromancer', 'Omnipresent', 'Omniscient', 'Poison', 'Possession', 'Self-detonation', 'Summoning', 'Water breathing']
+                   'Invulnerability', 'Necromancer', 'Omnipresent', 'Omniscient', 'Poison', 'Possession', 'Self-detonation', 'Summoning', 'Water breathing']
     return jsonify(magicskills)
 
 
 @app.route('/api/courses/get')
 def getcourses():
     courses = ['Alchemy basics', 'Alchemy advanced', 'Magic for day-to-day life',
-           'Magic for medical professionals', 'Dating with magic']
+               'Magic for medical professionals', 'Dating with magic']
     return jsonify(courses)
 
 
@@ -86,26 +91,26 @@ def createstudent():
 
     magicskills = student.get('magicskills')
     for magicskill in magicskills:
-        skill = magicskill.get('skill')
-        skilltype = magicskill.get('skilltype')
-        level = magicskill.get('level')
-        new_skill = StudentSkill(studentid=new_student, skill=skill, skilltype=skilltype, level=level)
-        db.session.add(new_skill)
+        new_skill = StudentSkill(
+            skill=magicskill.get('skill'),
+            skilltype=magicskill.get('skilltype'),
+            level=magicskill.get('level'))
+        new_student.magicskills.append(new_skill)
 
     courses = student.get('courses')
     for course in courses:
-        new_course = StudentCourse(studentid=new_student, course=course)
-        db.session.add(new_course)
+        new_course = StudentCourse(course=course)
+        new_student.courses.append(new_course)
 
     db.session.commit()
-    
+
     return 'Added new student'
 
 
 @app.route('/api/students/get')
 def getstudent():
     students = db.session.query(Student).all()
-    student_schema = StudentSchema(many=True)
+    student_schema = StudentSchema(many=True, exclude=('magicskills', 'courses'))
     output = student_schema.dump(students)
     return jsonify(output)
 
@@ -113,7 +118,7 @@ def getstudent():
 @app.route('/api/students/get/<id>')
 def getstudentbyid(id):
     student = db.session.query(Student).get(id)
-    student_schema = StudentSchema()
+    student_schema = StudentSchema(exclude=('magicskills.id', 'courses.id'))
     output = student_schema.dump(student)
     return jsonify(output)
 
@@ -141,4 +146,4 @@ def getstudentcourse(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=True)

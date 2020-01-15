@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getStudentById, getStudentSkill, getStudentCourse } from '../lib/api.js';
+import { getStudentById } from '../lib/api.js';
+import StudentForm from '../components/StudentForm.js'
 
 function StudentProfile(props) {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [student, setStudent] = useState(null);
-    const [magicSkills, setMagicSKills] = useState([]);
-    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -15,18 +14,6 @@ function StudentProfile(props) {
                 const myStudent = response.data;
                 console.log(myStudent)
                 setStudent(myStudent);
-                for (const stutentSkillId of myStudent.magicskills) {
-                    response = await getStudentSkill(stutentSkillId);
-                    const myStudentSkill = response.data;
-                    console.log('myStudentSkill:', myStudentSkill)
-                    setMagicSKills([...magicSkills, myStudentSkill]);
-                }
-                for (const stutentCourseId of myStudent.courses) {
-                    response = await getStudentCourse(stutentCourseId);
-                    const myStudentCourse = response.data;
-                    console.log('myStudentCourse:', myStudentCourse)
-                    setCourses([...courses, myStudentCourse]);
-                }
             }
             catch (error) {
                 // setErrorMessage();
@@ -43,6 +30,13 @@ function StudentProfile(props) {
                 </>
             }
             {student &&
+                // <StudentContext.Provider value={stateContext}>
+
+                //     <StudentForm
+                //         disabled={false}
+                //         onSubmitHandler={onCreateHandler}
+                //     />
+                // </StudentContext.Provider>
                 <div>
                     <p>
                         ID: {student.id}
@@ -54,13 +48,13 @@ function StudentProfile(props) {
                         Last Name: {student.lastname}
                     </p>
                     <p>
-                        Existing Magic Skillz: {magicSkills.toString()}
+                        Existing Magic Skillz: {student.magicskills.toString()}
                     </p>
                     <p>
                         Desired Magic Skillz:
                     </p>
                     <p>
-                        Interested in Courses: {courses.toString()}
+                        Interested in Courses: {student.courses.toString()}
                     </p>
                     <p>
                         Created On: {student.created}

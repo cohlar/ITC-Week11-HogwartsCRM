@@ -5,73 +5,85 @@ import CoursesMultiSelect from './CoursesMultiSelect.js';
 import { StudentContext } from '../context/StudentContext.js'
 
 function StudentForm(props) {
-    const { disabled, onSumbitHandler } = props;
+    const { disabled, onSubmitHandler } = props;
     const parentContext = useContext(StudentContext);
-
-    function setMagicSkillByIndex(index, new_skill) {
-        const skills = parentContext.magicSkills;
-        skills[index] = new_skill;
-        parentContext.setMagicSkills(skills);
-    }
 
     return (
         <form>
-            <Grid item xs={6}>
-                <TextField
-                    id='firstname'
-                    label='First Name'
-                    onChange={(e) => parentContext.setFirstname(e.target.value)}
-                />
+            <Grid container spacing={3}>
+
+                <Grid item xs={6}>
+                    <TextField
+                        id='firstname'
+                        label='First Name'
+                        onChange={(e) => parentContext.setFirstname(e.target.value)}
+                        required={!disabled}
+                        disabled={disabled}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <TextField
+                        id='lastname'
+                        label='Last Name'
+                        onChange={(e) => parentContext.setLastname(e.target.value)}
+                        required={!disabled}
+                        disabled={disabled}
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    Magic Skills:
             </Grid>
 
-            <Grid item xs={6}>
-                <TextField
-                    id='lastname'
-                    label='Last Name'
-                    onChange={(e) => parentContext.setLastname(e.target.value)}
-                />
-            </Grid>
+                {parentContext.magicSkills.map((skill, index) =>
+                    <MagicSkillForm
+                        key={index}
+                        index={index}
+                        disabled={disabled}
+                    />
+                )}
 
-            <Grid item xs={12}>
-                Magic Skills:
-            </Grid>
-
-            {parentContext.magicSkills.map((skill, index) =>
-                <MagicSkillForm
-                    key={index}
-                    setParentMagicSkill={setMagicSkillByIndex}
-                    index={index}
-                />
-            )}
-
-            <Grid item xs={12}>
-                <Button
-                    variant='contained'
-                    onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {}])}
-                >
-                    Add Magic Skill
+                <Grid item xs={12}>
+                    <Button
+                        variant='contained'
+                        onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {}])}
+                        disabled={disabled}
+                    >
+                        Add Magic Skill
                         </Button>
-            </Grid>
+                </Grid>
 
-            <Grid item xs={12}>
-                Interested in Courses:
+                <Grid item xs={12}>
+                    Interested in Courses:
                     </Grid>
 
-            <Grid item xs={12}>
-                <CoursesMultiSelect
-                    courses={parentContext.courses}
-                    onChangeHandler={(e) => parentContext.setCourses(e.target.value)}
-                />
-            </Grid>
+                <Grid item xs={12}>
+                    <CoursesMultiSelect
+                        courses={parentContext.courses}
+                        onChangeHandler={(e) => parentContext.setCourses(e.target.value)}
+                        disabled={disabled}
+                    />
+                </Grid>
 
-            <Grid item xs={12}>
-                <Button
-                    variant='contained'
-                    onClick={onSumbitHandler}
-                    type='submit'
-                >
-                    Create
-                </Button>
+                <Grid item xs={12}>
+                    <Button
+                        variant='contained'
+                        onClick={onSubmitHandler}
+                        disabled={disabled}
+                    >
+                        Create
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                    {parentContext.formMessage.status &&
+                        <div className={parentContext.formMessage.status}>
+                            {parentContext.formMessage.message}
+                        </div>
+                    }
+                </Grid>
+
             </Grid>
         </form>
     );

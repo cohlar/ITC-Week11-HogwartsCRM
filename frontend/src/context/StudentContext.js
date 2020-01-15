@@ -13,4 +13,7 @@ export const StudentContext = createContext({
 
     courses: [],
     setCourses: () => { },
+
+    formMessage: { 'status': null, 'message': null },
+    setFormMessage:  () => { },
 }); 
