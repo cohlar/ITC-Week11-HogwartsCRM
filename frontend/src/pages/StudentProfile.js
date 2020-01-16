@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getStudentById } from '../lib/api.js';
+import { getStudent, editStudent, deleteStudent } from '../lib/api.js';
 import StudentForm from '../components/StudentForm.js'
 import { StudentContext } from '../context/StudentContext.js'
 
@@ -28,11 +28,37 @@ function StudentProfile(props) {
         setCourses(student.courses.map( (course) => course.course ));
     }
 
+    const onEditHandler = async (e) => {
+        e.preventDefault();
+        try {
+            editStudent(id, firstname, lastname, magicSkills, courses);
+            // setSuccessMessage();
+            // resetState();
+        }
+        catch (error) {
+            // setErrorMessage();
+            console.log(error.response);
+        }
+    }
+
+    const onDeleteHandler = async (e) => {
+        e.preventDefault();
+        try {
+            deleteStudent(id);
+            // setSuccessMessage();
+            // resetState();
+        }
+        catch (error) {
+            // setErrorMessage();
+            console.log(error.response);
+        }
+    }
+
     useEffect(() => {
         (async () => {
             setIsLoading(true);
             try {
-                let response = await getStudentById(id);
+                let response = await getStudent(id);
                 const myStudent = response.data;
                 console.log(myStudent)
                 setStudent(myStudent);
@@ -56,37 +82,10 @@ function StudentProfile(props) {
                 <StudentContext.Provider value={stateContext}>
                     <StudentForm
                         action='view'
-                        onSubmitHandler={() => { }}
+                        onEditHandler={onEditHandler}
+                        onDeleteHandler={onDeleteHandler}
                     />
                 </StudentContext.Provider>
-
-                // <div />
-                // <div>
-                //     <p>
-                //         ID: {student.id}
-                //     </p>
-                //     <p>
-                //         First Name: {student.firstname}
-                //     </p>
-                //     <p>
-                //         Last Name: {student.lastname}
-                //     </p>
-                //     <p>
-                //         Existing Magic Skillz: {student.magicskills.toString()}
-                //     </p>
-                //     <p>
-                //         Desired Magic Skillz:
-                //     </p>
-                //     <p>
-                //         Interested in Courses: {student.courses.toString()}
-                //     </p>
-                //     <p>
-                //         Created On: {student.created}
-                //     </p>
-                //     <p>
-                //         Updated On: {student.lastupdated}
-                //     </p>
-                // </div>
             }
         </main>
     );

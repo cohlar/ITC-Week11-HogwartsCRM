@@ -49,7 +49,7 @@ function CoursesMultiSelect(props) {
     const classes = useStyles();
     const theme = useTheme();
 
-    const { courses, onChangeHandler } = props;
+    const { courses, onChangeHandler, disabled: isDisabled } = props;
 
     return (
         <FormControl className={classes.formControl}>
@@ -68,6 +68,7 @@ function CoursesMultiSelect(props) {
                     </div>
                 )}
                 MenuProps={MenuProps}
+                disabled={isDisabled}
             >
                 {course_list.map((course) =>
                     <MenuItem

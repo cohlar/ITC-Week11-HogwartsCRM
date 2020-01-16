@@ -65,7 +65,7 @@ function CreateStudent() {
             <StudentContext.Provider value={stateContext}>
                 <StudentForm
                     action='create'
-                    onSubmitHandler={onCreateHandler}
+                    onCreateHandler={onCreateHandler}
                 />
             </StudentContext.Provider>
         </main >

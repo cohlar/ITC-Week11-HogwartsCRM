@@ -27,7 +27,7 @@ function MagicSkillForm(props) {
             'level': skillLevel,
         }
         setMagicSkillByIndex(index, new_skill);
-    }, [magicSkill, skillType, skillLevel]);
+    }, [index, magicSkill, skillType, skillLevel]);
 
     return (
         <>
