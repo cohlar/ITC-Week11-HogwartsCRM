@@ -70,7 +70,8 @@ nav .nav-element .nav-icon {
 
 main {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   flex-grow: 1;
   padding: 30px 30px;
 }

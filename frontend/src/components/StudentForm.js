@@ -9,22 +9,22 @@ function StudentForm(props) {
     const { action: parentAction, onCreateHandler = null, onEditHandler = null, onDeleteHandler = null } = props;
     const [action, setAction] = useState(parentAction);
     const [isLoading, setIsLoading] = useState(false);
-    const [redirect, setRedirect] = useState(false);
+    // const [redirect, setRedirect] = useState(false);
     const parentContext = useContext(StudentContext);
 
     function isDisabled() {
         return action === 'view';
     }
 
-    function renderRedirect() {
-        if (redirect) {
-            return <Redirect to='/students' />;
-        } else return null;
-    }
+    // function renderRedirect() {
+    //     if (redirect) {
+    //         return <Redirect to='/students' />;
+    //     } else return null;
+    // }
 
     return (
         <form>
-            {renderRedirect()}
+            {/* {renderRedirect()} */}
 
             <Grid container spacing={2}>
 
@@ -109,7 +109,7 @@ function StudentForm(props) {
                                 onClick={(e) => {
                                     setIsLoading(true);
                                     onDeleteHandler(e);
-                                    setRedirect(true);
+                                    // setRedirect(true);
                                 }}
                             >
                                 Delete

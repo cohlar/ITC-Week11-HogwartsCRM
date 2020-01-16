@@ -40,12 +40,17 @@ export function getStudents() {
     return axios.get(baseUrl + apiPath);
 }
 
-// export function getStudentSkill(id) {
-//     const apiPath = 'api/studentskills/get';
-//     return axios.get(baseUrl + apiPath + '/' + id);
-// }
+export function getStudentsByDay() {
+    const apiPath = 'api/stats/students/daily';
+    return axios.get(baseUrl + apiPath);
+}
 
-// export function getStudentCourse(id) {
-//     const apiPath = 'api/studentcourses/get';
-//     return axios.get(baseUrl + apiPath + '/' + id);
-// }
+export function getStudentSkills() {
+    const apiPath = 'api/stats/students/skills';
+    return axios.get(baseUrl + apiPath);
+}
+
+export function getStudentCourses() {
+    const apiPath = 'api/stats/students/courses';
+    return axios.get(baseUrl + apiPath);
+}
