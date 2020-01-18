@@ -50,3 +50,9 @@ def persist_courses_existing_student(db, StudentCourse, current_student, new_cou
         db.session.delete(current_course)
     persist_new_courses(StudentCourse, current_student, new_courses)
     return True
+
+
+def has_duplicate(mylist):
+    if len(mylist) > len(set(mylist)):
+        return True
+    return False

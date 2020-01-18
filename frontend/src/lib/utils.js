@@ -10,3 +10,9 @@ export function getParameterByName(name, url) {
 export function formatDatetime(datetimeString) {
     return datetimeString.split('.')[0].replace('T', ' ');
 }
+
+export function parseErrorMessage(html_string) {
+    const start = html_string.indexOf('<p>') + 3;
+    const end = html_string.indexOf('</p>');
+    return html_string.substring(start, end);
+}

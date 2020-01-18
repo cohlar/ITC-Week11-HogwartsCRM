@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 import MagicSkillForm from './MagicSkillForm.js';
 import CoursesMultiSelect from './CoursesMultiSelect.js';
@@ -18,10 +18,6 @@ function StudentForm(props) {
         resetStudent();
         setAction('view');
     }
-
-    useEffect(() => {
-        console.log(parentContext.magicSkills)
-    })
 
     return (
         <form>
@@ -55,7 +51,7 @@ function StudentForm(props) {
 
                 {parentContext.magicSkills.map((skill, index) =>
                     <MagicSkillForm
-                        key={index+skill.skill}
+                        key={index + skill.skill}
                         skill={skill}
                         index={index}
                         disabled={isDisabled()}
@@ -95,20 +91,20 @@ function StudentForm(props) {
                         </Button>
                     }
 
-                    {action === 'view' &&
+                    {action === 'view' && !parentContext.isDeleted &&
                         <>
                             <Button
                                 variant='contained'
                                 onClick={() => setAction('edit')}
                             >
                                 Edit
-                            </Button>
+                                </Button>
                             <Button
                                 variant='contained'
                                 onClick={(e) => {
                                     setIsLoading(true);
                                     onDeleteHandler(e);
-                                    // setRedirect(true);
+                                    setIsLoading(false);
                                 }}
                             >
                                 Delete

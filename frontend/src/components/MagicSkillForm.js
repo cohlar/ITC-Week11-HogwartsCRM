@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid, FormControlLabel, InputLabel, Select, MenuItem, RadioGroup, Radio, Slider, Typography } from '@material-ui/core';
-import { DeleteIcon } from './Icons.js'
-import { getMagicSkills } from '../lib/api.js'
-import { StudentContext } from '../context/StudentContext.js'
+import { DeleteIcon } from './Icons.js';
+import { getMagicSkills } from '../lib/api.js';
+import { parseErrorMessage } from '../lib/utils.js';
+import { StudentContext } from '../context/StudentContext.js';
 
 function MagicSkillForm(props) {
-    const { skill, index, disabled : isDisabled } = props;
+    const { skill, index, disabled: isDisabled } = props;
     const parentContext = useContext(StudentContext);
 
     const [staticMagicSkills, setStaticMagicSkills] = useState([]);
     const [magicSkill, setMagicSkill] = useState(skill.skill);
     const [skillType, setSkillType] = useState(skill.skilltype);
     const [skillLevel, setSkillLevel] = useState(skill.level || 1);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     function deleteMagicSkill(index) {
         const skills = parentContext.magicSkills;
@@ -24,11 +26,9 @@ function MagicSkillForm(props) {
             try {
                 const response = await getMagicSkills();
                 setStaticMagicSkills(response.data);
-                // setSuccessMessage();
             }
             catch (error) {
-                // setErrorMessage();
-                console.log(error.response);
+                setErrorMessage(parseErrorMessage(error.response.data));
             }
         })();
     }, [])
@@ -104,6 +104,11 @@ function MagicSkillForm(props) {
                     disabled={isDisabled}
                 />
             </Grid>
+            {errorMessage &&
+                <div className='error'>
+                    {errorMessage}
+                </div>
+            }
         </>
     );
 }

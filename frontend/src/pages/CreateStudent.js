@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import StudentForm from '../components/StudentForm.js';
 import { createStudent } from '../lib/api.js';
-import StudentForm from '../components/StudentForm.js'
-import { StudentContext } from '../context/StudentContext.js'
+import { parseErrorMessage } from '../lib/utils.js';
+import { StudentContext } from '../context/StudentContext.js';
 
 function CreateStudent() {
     const [firstname, setFirstname] = useState('');
@@ -25,21 +26,10 @@ function CreateStudent() {
         setCourses([]);
     }
 
-    function setSuccessMessage() {
+    function setTempMessage(status, message) {
         setFormMessage({
-            'status': 'success',
-            'message': 'Student has been successfully added to the database.'
-        });
-
-        setTimeout(() => {
-            setFormMessage({ 'status': null, 'message': null })
-        }, 5000);
-    }
-
-    function setErrorMessage() {
-        setFormMessage({
-            'status': 'error',
-            'message': 'There has been an error, please try again later (please see console for additional information).'
+            'status': status,
+            'message': message
         });
 
         setTimeout(() => {
@@ -51,12 +41,11 @@ function CreateStudent() {
         e.preventDefault();
         try {
             await createStudent(firstname, lastname, magicSkills, courses);
-            setSuccessMessage();
+            setTempMessage('success', 'Student has been successfully added to the database.');
             resetState();
         }
         catch (error) {
-            setErrorMessage();
-            console.log(error.response);
+            setTempMessage('error', parseErrorMessage(error.response.data));
         }
     }
 

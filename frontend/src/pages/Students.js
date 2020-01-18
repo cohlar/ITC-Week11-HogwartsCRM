@@ -1,31 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import StudentsList from '../components/StudentsList.js';
 import { getStudents, deleteStudent } from '../lib/api.js';
-import StudentsList from '../components/StudentsList.js'
+import { parseErrorMessage } from '../lib/utils.js';
 
 function Students() {
+    const [isLoading, setIsLoading] = useState(false);
     const [students, setStudents] = useState([]);
+    const [formMessage, setFormMessage] = useState({ 'status': null, 'message': null });
+
+    function setTempMessage(type, message) {
+        setFormMessage({
+            'status': type,
+            'message': message
+        });
+
+        setTimeout(() => {
+            setFormMessage({ 'status': null, 'message': null })
+        }, 5000);
+    }
 
     async function fetchStudents() {
+        setIsLoading(true);
         try {
-            const response = await getStudents(1);
+            const response = await getStudents();
             setStudents(response.data);
         }
         catch (error) {
-            // setErrorMessage();
-            console.log(error.toString());
+            setFormMessage({
+                'status': 'error',
+                'message': parseErrorMessage(error.response.data)
+            });
         }
+        setIsLoading(false);
     }
 
     async function onDeleteHandler(id) {
         try {
             await deleteStudent(id);
             fetchStudents();
-            // setSuccessMessage();
-            // resetState();
+            setTempMessage('success', 'Student has been successfully deleted from the database.');
         }
         catch (error) {
-            // setErrorMessage();
-            console.log(error.response);
+            setTempMessage('error', parseErrorMessage(error.response.data));
         }
     }
 
@@ -35,16 +51,24 @@ function Students() {
 
     return (
         <main>
-            {students.length === 0 &&
+            {isLoading &&
                 <>
                     Loading...
                 </>
             }
-            {students.length > 0 &&
+            {!isLoading && students.length > 0 &&
                 <StudentsList
                     students={students}
                     onDeleteHandler={onDeleteHandler}
                 />
+            }
+            {formMessage &&
+                <>
+                    <br />
+                    <div className={formMessage.status}>
+                        {formMessage.message}
+                    </div>
+                </>
             }
         </main>
     );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
+import StudentForm from '../components/StudentForm.js';
+import { StudentContext } from '../context/StudentContext.js';
 import { getStudent, editStudent, deleteStudent } from '../lib/api.js';
-import { getParameterByName } from '../lib/utils.js'
-import StudentForm from '../components/StudentForm.js'
-import { StudentContext } from '../context/StudentContext.js'
+import { getParameterByName, parseErrorMessage } from '../lib/utils.js';
 
 function StudentProfile() {
     const { id } = useParams();
@@ -15,6 +15,7 @@ function StudentProfile() {
     const [lastname, setLastname] = useState('');
     const [magicSkills, setMagicSkills] = useState([]);
     const [courses, setCourses] = useState([]);
+    const [isDeleted, setIsDeleted] = useState(false);
     const [formMessage, setFormMessage] = useState({ 'status': null, 'message': null });
 
     const stateContext = {
@@ -22,6 +23,7 @@ function StudentProfile() {
         lastname, setLastname,
         magicSkills, setMagicSkills,
         courses, setCourses,
+        isDeleted, setIsDeleted,
         formMessage, setFormMessage,
     }
 
@@ -32,16 +34,26 @@ function StudentProfile() {
         setCourses(student.courses.map((course) => course.course));
     }
 
+    function setTempMessage(status, message) {
+        setFormMessage({
+            'status': status,
+            'message': message
+        });
+
+        setTimeout(() => {
+            setFormMessage({ 'status': null, 'message': null })
+        }, 5000);
+    }
+
+
     const onEditHandler = async (e) => {
         e.preventDefault();
         try {
             await editStudent(id, firstname, lastname, magicSkills, courses);
-            // setSuccessMessage();
-            // resetState();
+            setTempMessage('success', 'Student has been successfully updated in the database.');
         }
         catch (error) {
-            // setErrorMessage();
-            console.log(error.response);
+            setTempMessage('error', parseErrorMessage(error.response.data));
         }
     }
 
@@ -49,12 +61,11 @@ function StudentProfile() {
         e.preventDefault();
         try {
             await deleteStudent(id);
-            // setSuccessMessage();
-            // resetState();
+            setIsDeleted(true);
+            setTempMessage('success', 'Student has been successfully deleted from the database.');
         }
         catch (error) {
-            // setErrorMessage();
-            console.log(error.response);
+            setTempMessage('error', parseErrorMessage(error.response.data));
         }
     }
 
@@ -65,8 +76,7 @@ function StudentProfile() {
             setStudent(myStudent);
         }
         catch (error) {
-            // setErrorMessage();
-            console.log(error.toString());
+            setTempMessage('error', parseErrorMessage(error.response.data));
         }
     }
 
@@ -79,8 +89,10 @@ function StudentProfile() {
                 setStudent(myStudent);
             }
             catch (error) {
-                // setErrorMessage();
-                console.log(error.toString());
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Student profile could not be loaded due to the following server error: ' + console.log(parseErrorMessage(error.response.data))
+                });
             }
             setIsLoading(false);
         })();

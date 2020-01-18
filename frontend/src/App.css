@@ -55,13 +55,17 @@ nav .nav-element {
   border-bottom: 1px solid white;
 }
 
-nav .nav-element:hover, nav .nav-element.active {
+nav .nav-element:not(.disabled):hover, nav .nav-element.active {
   color: rgba(0, 0, 0, .8);
   background: var(--yellow);
 }
 
-nav .nav-element:active {
+nav .nav-element:not(.disabled):active {
   transform: scale(1.01);
+}
+
+nav .nav-element.disabled {
+  cursor: default;
 }
 
 nav .nav-element .nav-icon {

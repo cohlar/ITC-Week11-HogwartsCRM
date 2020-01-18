@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Input, Chip } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { getCourses } from '../lib/api.js'
+import { getCourses } from '../lib/api.js';
+import { parseErrorMessage } from '../lib/utils.js';
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -45,6 +46,7 @@ function getStyles(course, courses, theme) {
 function CoursesMultiSelect(props) {
     const { courses, onChangeHandler, disabled: isDisabled } = props;
     const [staticCourses, setStaticCourses] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const classes = useStyles();
     const theme = useTheme();
@@ -54,11 +56,9 @@ function CoursesMultiSelect(props) {
             try {
                 const response = await getCourses();
                 setStaticCourses(response.data);
-                // setSuccessMessage();
             }
             catch (error) {
-                // setErrorMessage();
-                console.log(error.response);
+                setErrorMessage(parseErrorMessage(error.response.data));
             }
         })();
     }, [])
@@ -92,6 +92,11 @@ function CoursesMultiSelect(props) {
                     </MenuItem>
                 )}
             </Select>
+            {errorMessage &&
+                <div className='error'>
+                    {errorMessage}
+                </div>
+            }
         </FormControl >
     );
 }
