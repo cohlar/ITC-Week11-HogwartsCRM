@@ -2,9 +2,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { ViewIcon, EditIcon, DeleteIcon } from './Icons.js'
+import { formatDatetime } from '../lib/utils.js'
 
 function StudentsList(props) {
-    const { students } = props;
+    const { students, onDeleteHandler } = props;
 
     const StyledTableCell = withStyles(theme => ({
         head: {
@@ -30,11 +32,11 @@ function StudentsList(props) {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell>Id</StyledTableCell>
-                        <StyledTableCell>First Name</StyledTableCell>
-                        <StyledTableCell>Last Name</StyledTableCell>
-                        <StyledTableCell>Created (UTC)</StyledTableCell>
-                        <StyledTableCell>Last Updated (UTC)</StyledTableCell>
-                        <StyledTableCell align='right'>Actions</StyledTableCell>
+                        <StyledTableCell style={{ minWidth: 80 }}>First Name</StyledTableCell>
+                        <StyledTableCell style={{ minWidth: 80 }}>Last Name</StyledTableCell>
+                        <StyledTableCell style={{ minWidth: 140 }}>Created (UTC)</StyledTableCell>
+                        <StyledTableCell style={{ minWidth: 140 }}>Last Updated (UTC)</StyledTableCell>
+                        <StyledTableCell style={{ minWidth: 110 }} align='center'>Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -45,12 +47,20 @@ function StudentsList(props) {
                             </StyledTableCell>
                             <StyledTableCell>{student.firstname}</StyledTableCell>
                             <StyledTableCell>{student.lastname}</StyledTableCell>
-                            <StyledTableCell>{student.created}</StyledTableCell>
-                            <StyledTableCell>{student.lastupdated}</StyledTableCell>
-                            <StyledTableCell align='right'>
-                                <NavLink to={'/student-profile/' + student.id} className='student-card-link'>
-                                    View Details
+                            <StyledTableCell>{formatDatetime(student.created)}</StyledTableCell>
+                            <StyledTableCell>{formatDatetime(student.lastupdated)}</StyledTableCell>
+                            <StyledTableCell align='center'>
+                                <NavLink to={'/student-profile/' + student.id} className='action-icon view'>
+                                    <ViewIcon />
                                 </NavLink>
+                                <NavLink to={'/student-profile/' + student.id + '?action=edit'}
+                                    className='action-icon edit'
+                                >
+                                    <EditIcon />
+                                </NavLink>
+                                <span className='action-icon delete' onClick={() => onDeleteHandler(student.id)}>
+                                    <DeleteIcon />
+                                </span>
                             </StyledTableCell>
                         </StyledTableRow>
                     ))}

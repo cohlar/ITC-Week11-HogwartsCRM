@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const baseUrl = 'http://127.0.0.1:5000/';
 
+export function getMagicSkills() {
+    const apiPath = 'api/magicskills';
+    return axios.get(baseUrl + apiPath);
+}
+
+export function getCourses() {
+    const apiPath = 'api/courses';
+    return axios.get(baseUrl + apiPath);
+}
+
 export function createStudent(firstname, lastname, magicSkills, courses) {
     const apiPath = 'api/student';
     const payload = {

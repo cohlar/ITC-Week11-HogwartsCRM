@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-    PieChart, Pie, Sector, Cell
-} from 'recharts';
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell,
+    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { getStudentsByDay, getStudentSkills, getStudentCourses } from '../lib/api.js';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -25,7 +23,6 @@ function Dashboard() {
                 setStudentsByDay(response.studentsByDay.data);
                 setStudentSkills(response.studentSkills.data);
                 setStudentCourses(response.studentCourses.data);
-                console.log(response.studentCourses.data)
             }
             catch (error) {
                 // setErrorMessage();

@@ -1,31 +1,30 @@
-import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 import MagicSkillForm from './MagicSkillForm.js';
 import CoursesMultiSelect from './CoursesMultiSelect.js';
 import { StudentContext } from '../context/StudentContext.js'
 
 function StudentForm(props) {
-    const { action: parentAction, onCreateHandler = null, onEditHandler = null, onDeleteHandler = null } = props;
+    const { action: parentAction, onCreateHandler = null, onEditHandler = null, onDeleteHandler = null, resetStudent = null } = props;
     const [action, setAction] = useState(parentAction);
     const [isLoading, setIsLoading] = useState(false);
-    // const [redirect, setRedirect] = useState(false);
     const parentContext = useContext(StudentContext);
 
     function isDisabled() {
         return action === 'view';
     }
 
-    // function renderRedirect() {
-    //     if (redirect) {
-    //         return <Redirect to='/students' />;
-    //     } else return null;
-    // }
+    function onCancelHander() {
+        resetStudent();
+        setAction('view');
+    }
+
+    useEffect(() => {
+        console.log(parentContext.magicSkills)
+    })
 
     return (
         <form>
-            {/* {renderRedirect()} */}
-
             <Grid container spacing={2}>
 
                 <Grid item xs={6}>
@@ -56,7 +55,7 @@ function StudentForm(props) {
 
                 {parentContext.magicSkills.map((skill, index) =>
                     <MagicSkillForm
-                        key={index}
+                        key={index+skill.skill}
                         skill={skill}
                         index={index}
                         disabled={isDisabled()}
@@ -75,7 +74,7 @@ function StudentForm(props) {
 
                 <Grid item xs={12}>
                     Interested in Courses:
-                    </Grid>
+                </Grid>
 
                 <Grid item xs={12}>
                     <CoursesMultiSelect
@@ -121,7 +120,7 @@ function StudentForm(props) {
                         <>
                             <Button
                                 variant='contained'
-                                onClick={() => setAction('view')}
+                                onClick={onCancelHander}
                             >
                                 Cancel
                             </Button>

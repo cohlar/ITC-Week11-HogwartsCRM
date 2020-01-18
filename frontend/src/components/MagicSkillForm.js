@@ -1,37 +1,64 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Grid, FormControlLabel, InputLabel, Select, MenuItem, RadioGroup, Radio, Slider, Typography } from '@material-ui/core';
+import { DeleteIcon } from './Icons.js'
+import { getMagicSkills } from '../lib/api.js'
 import { StudentContext } from '../context/StudentContext.js'
 
-// Pass these from the server
-const magicskills = ['Alchemy', 'Animation', 'Conjuror', 'Disintegration', 'Elemental', 'Healing', 'Illusion', 'Immortality', 'Invisibility',
-    'Invulnerability', 'Necromancer', 'Omnipresent', 'Omniscient', 'Poison', 'Possession', 'Self-detonation', 'Summoning', 'Water breathing']
-
 function MagicSkillForm(props) {
-    const { skill, index, disabled: isDisabled } = props;
+    const { skill, index, disabled : isDisabled } = props;
     const parentContext = useContext(StudentContext);
 
+    const [staticMagicSkills, setStaticMagicSkills] = useState([]);
     const [magicSkill, setMagicSkill] = useState(skill.skill);
     const [skillType, setSkillType] = useState(skill.skilltype);
-    const [skillLevel, setSkillLevel] = useState(skill.level);
+    const [skillLevel, setSkillLevel] = useState(skill.level || 1);
 
-    function setMagicSkillByIndex(index, new_skill) {
+    function deleteMagicSkill(index) {
         const skills = parentContext.magicSkills;
-        skills[index] = new_skill;
-        parentContext.setMagicSkills(skills);
+        skills.splice(index, 1);
+        parentContext.setMagicSkills([...skills]);
     }
 
     useEffect(() => {
+        (async () => {
+            try {
+                const response = await getMagicSkills();
+                setStaticMagicSkills(response.data);
+                // setSuccessMessage();
+            }
+            catch (error) {
+                // setErrorMessage();
+                console.log(error.response);
+            }
+        })();
+    }, [])
+
+    useEffect(() => {
+        function setMagicSkillByIndex(index, new_skill) {
+            const skills = parentContext.magicSkills;
+            skills[index] = new_skill;
+            parentContext.setMagicSkills(skills);
+        }
         const new_skill = {
             'skill': magicSkill,
             'skilltype': skillType,
             'level': skillLevel,
         }
         setMagicSkillByIndex(index, new_skill);
-    }, [index, magicSkill, skillType, skillLevel]);
+    }, [index, parentContext, magicSkill, skillType, skillLevel]);
 
     return (
         <>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
+                {!isDisabled &&
+                    <span className='action-icon delete margin-top' onClick={() => deleteMagicSkill(index)}
+                    >
+                        <DeleteIcon />
+                    </span>
+                }
+            </Grid>
+
+            <Grid item xs={3}>
                 <InputLabel id='magic-skill-label'>Magic skill</InputLabel>
                 <Select
                     labelId='magic-skill-label'
@@ -40,13 +67,13 @@ function MagicSkillForm(props) {
                     required={!isDisabled}
                     disabled={isDisabled}
                 >
-                    {magicskills.map((skill) =>
+                    {staticMagicSkills.map((skill) =>
                         <MenuItem key={skill} value={skill}>{skill}</MenuItem>
                     )}
                 </Select>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={5}>
                 <RadioGroup
                     aria-label='skill-type'
                     name='skill-type'
@@ -60,7 +87,7 @@ function MagicSkillForm(props) {
                 </RadioGroup>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={3}>
                 <Typography id="magic-skill-level-label" gutterBottom>
                     Skill Level
                 </Typography>

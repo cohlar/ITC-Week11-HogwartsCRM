@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from flask import Flask, request, abort, jsonify#, render_template
+from flask import Flask, request, abort, jsonify, render_template
 from sqlalchemy import func
 from flask_cors import CORS
 from hogwarts.db.db import db, ma
@@ -45,7 +45,7 @@ def createstudent():
     firstname, lastname, magicskills, courses = utils.parsestudent_json(student_json)
     
     if not firstname or not lastname:
-        abort(400, message='Both first name and last name are mandatory fields')
+        abort(400, 'Both first name and last name are mandatory fields')
     
     student_instance = Student(firstname=firstname, lastname=lastname)
     
@@ -62,7 +62,7 @@ def getstudent(id):
     student = db.session.query(Student).get(id)
     
     if not student:
-        abort(404, message='Student not found')
+        abort(404, 'Student not found')
     
     student_schema = StudentSchema()
     output = student_schema.dump(student)

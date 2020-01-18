@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { getStudent, editStudent, deleteStudent } from '../lib/api.js';
+import { getParameterByName } from '../lib/utils.js'
 import StudentForm from '../components/StudentForm.js'
 import { StudentContext } from '../context/StudentContext.js'
 
-function StudentProfile(props) {
+function StudentProfile() {
     const { id } = useParams();
+    const location = useLocation();
+    const action = ( getParameterByName('action', location.search) ) ? getParameterByName('action', location.search) : 'view';
+
     const [isLoading, setIsLoading] = useState(false);
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
@@ -25,13 +29,13 @@ function StudentProfile(props) {
         setFirstname(student.firstname);
         setLastname(student.lastname);
         setMagicSkills(student.magicskills);
-        setCourses(student.courses.map( (course) => course.course ));
+        setCourses(student.courses.map((course) => course.course));
     }
 
     const onEditHandler = async (e) => {
         e.preventDefault();
         try {
-            editStudent(id, firstname, lastname, magicSkills, courses);
+            await editStudent(id, firstname, lastname, magicSkills, courses);
             // setSuccessMessage();
             // resetState();
         }
@@ -44,7 +48,7 @@ function StudentProfile(props) {
     const onDeleteHandler = async (e) => {
         e.preventDefault();
         try {
-            deleteStudent(id);
+            await deleteStudent(id);
             // setSuccessMessage();
             // resetState();
         }
@@ -54,13 +58,24 @@ function StudentProfile(props) {
         }
     }
 
+    const resetStudent = async () => {
+        try {
+            let response = await getStudent(id);
+            const myStudent = response.data;
+            setStudent(myStudent);
+        }
+        catch (error) {
+            // setErrorMessage();
+            console.log(error.toString());
+        }
+    }
+
     useEffect(() => {
         (async () => {
             setIsLoading(true);
             try {
                 let response = await getStudent(id);
                 const myStudent = response.data;
-                console.log(myStudent)
                 setStudent(myStudent);
             }
             catch (error) {
@@ -81,9 +96,10 @@ function StudentProfile(props) {
             {!isLoading &&
                 <StudentContext.Provider value={stateContext}>
                     <StudentForm
-                        action='view'
+                        action={action}
                         onEditHandler={onEditHandler}
                         onDeleteHandler={onDeleteHandler}
+                        resetStudent={resetStudent}
                     />
                 </StudentContext.Provider>
             }

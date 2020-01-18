@@ -1,10 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Input, Chip } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
-// Pass these from the server
-const course_list = ['Alchemy basics', 'Alchemy advanced', 'Magic for day-to-day life',
-    'Magic for medical professionals', 'Dating with magic']
+import { getCourses } from '../lib/api.js'
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -46,10 +43,25 @@ function getStyles(course, courses, theme) {
 
 
 function CoursesMultiSelect(props) {
+    const { courses, onChangeHandler, disabled: isDisabled } = props;
+    const [staticCourses, setStaticCourses] = useState([]);
+
     const classes = useStyles();
     const theme = useTheme();
 
-    const { courses, onChangeHandler, disabled: isDisabled } = props;
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await getCourses();
+                setStaticCourses(response.data);
+                // setSuccessMessage();
+            }
+            catch (error) {
+                // setErrorMessage();
+                console.log(error.response);
+            }
+        })();
+    }, [])
 
     return (
         <FormControl className={classes.formControl}>
@@ -70,7 +82,7 @@ function CoursesMultiSelect(props) {
                 MenuProps={MenuProps}
                 disabled={isDisabled}
             >
-                {course_list.map((course) =>
+                {staticCourses.map((course) =>
                     <MenuItem
                         key={course}
                         value={course}
