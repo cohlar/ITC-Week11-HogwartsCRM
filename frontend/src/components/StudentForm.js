@@ -61,7 +61,7 @@ function StudentForm(props) {
                 <Grid item xs={12}>
                     <Button
                         variant='contained'
-                        onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {}])}
+                        onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {'skill': null}])}
                         disabled={isDisabled()}
                     >
                         Add Magic Skill

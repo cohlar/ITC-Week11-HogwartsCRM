@@ -52,17 +52,17 @@ def createstudent():
     if not firstname or not lastname:
         abort(400, 'Both first name and last name are mandatory fields.')
 
-    skills = list(map(lambda magicskill: magicskill['skill'], magicskills))
+    for magicskill in magicskills:
+        if not magicskill.get('skill',''):
+            abort(400, 'Each magic skill must be specified.')
+        elif not magicskill.get('skilltype',''):
+            abort(400, 'Each magic skill type must be specified.')
+        elif not magicskill.get('level'):
+            abort(400, 'Each magic skill level must be specified.')
+            
+    skills = list(map(lambda magicskill: magicskill.get('skill'), magicskills))
     if utils.has_duplicate(skills):
         abort(400, 'The same magic skill cannot be applied twice to the same student.')
-
-    for magicskill in magicskills:
-        if not magicskill['skilltype']:
-            abort(400, 'Each magic skill must be specified.')
-        elif not magicskill['skilltype']:
-            abort(400, 'Each magic skill type must be specified.')
-        elif not magicskill['level']:
-            abort(400, 'Each magic skill level must be specified.')
 
     student_instance = Student(firstname=firstname, lastname=lastname)
 
@@ -105,12 +105,16 @@ def editstudent():
         abort(400, 'Both first name and last name are mandatory fields.')
 
     for magicskill in magicskills:
-        if not magicskill['skilltype']:
+        if not magicskill.get('skill',''):
             abort(400, 'Each magic skill must be specified.')
-        elif not magicskill['skilltype']:
+        elif not magicskill.get('skilltype',''):
             abort(400, 'Each magic skill type must be specified.')
-        elif not magicskill['level']:
+        elif not magicskill.get('level'):
             abort(400, 'Each magic skill level must be specified.')
+            
+    skills = list(map(lambda magicskill: magicskill.get('skill'), magicskills))
+    if utils.has_duplicate(skills):
+        abort(400, 'The same magic skill cannot be applied twice to the same student.')
 
     current_student = db.session.query(Student).get(id)
     utils.persist_existing_student(current_student, firstname, lastname)
