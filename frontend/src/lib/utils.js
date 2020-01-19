@@ -1,10 +1,9 @@
-export function getParameterByName(name, url) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+export function getParameterByName(name, param_string) {
+    if (!param_string) return;
+    param_string = param_string.split('?')[1];
+    const params = param_string.split(/&|=/);
+    const index = params.indexOf(name);
+    return params[index+1];
 }
 
 export function formatDatetime(datetimeString) {

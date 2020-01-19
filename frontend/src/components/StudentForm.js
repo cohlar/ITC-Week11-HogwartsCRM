@@ -21,129 +21,142 @@ function StudentForm(props) {
 
     return (
         <form>
-            <Grid container spacing={2}>
+            {isLoading &&
+                <div className='loader'></div>
+            }
 
-                <Grid item xs={6}>
-                    <TextField
-                        id='firstname'
-                        label='First Name'
-                        value={parentContext.firstname}
-                        onChange={(e) => parentContext.setFirstname(e.target.value)}
-                        required={!isDisabled()}
-                        disabled={isDisabled()}
-                    />
-                </Grid>
+            {!isLoading &&
+                <Grid container spacing={2}>
 
-                <Grid item xs={6}>
-                    <TextField
-                        id='lastname'
-                        label='Last Name'
-                        value={parentContext.lastname}
-                        onChange={(e) => parentContext.setLastname(e.target.value)}
-                        required={!isDisabled()}
-                        disabled={isDisabled()}
-                    />
-                </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            id='firstname'
+                            label='First Name'
+                            value={parentContext.firstname}
+                            onChange={(e) => parentContext.setFirstname(e.target.value)}
+                            required={!isDisabled()}
+                            disabled={isDisabled()}
+                        />
+                    </Grid>
 
-                <Grid item xs={12}>
-                    Magic Skills:
-                </Grid>
+                    <Grid item xs={6}>
+                        <TextField
+                            id='lastname'
+                            label='Last Name'
+                            value={parentContext.lastname}
+                            onChange={(e) => parentContext.setLastname(e.target.value)}
+                            required={!isDisabled()}
+                            disabled={isDisabled()}
+                        />
+                    </Grid>
 
-                {parentContext.magicSkills.map((skill, index) =>
-                    <MagicSkillForm
-                        key={index + skill.skill}
-                        skill={skill}
-                        index={index}
-                        disabled={isDisabled()}
-                    />
-                )}
+                    <Grid item xs={12}>
+                        Magic Skills:
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Button
-                        variant='contained'
-                        onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {'skill': null}])}
-                        disabled={isDisabled()}
-                    >
-                        Add Magic Skill
-                    </Button>
-                </Grid>
+                    {parentContext.magicSkills.map((skill, index) =>
+                        <MagicSkillForm
+                            key={index + skill.skill}
+                            skill={skill}
+                            index={index}
+                            disabled={isDisabled()}
+                        />
+                    )}
 
-                <Grid item xs={12}>
-                    Interested in Courses:
-                </Grid>
-
-                <Grid item xs={12}>
-                    <CoursesMultiSelect
-                        courses={parentContext.courses}
-                        value={parentContext.courses}
-                        onChangeHandler={(e) => parentContext.setCourses(e.target.value)}
-                        disabled={isDisabled()}
-                    />
-                </Grid>
-
-                <Grid item xs={12} container justify='flex-end' spacing={0}>
-                    {action === 'create' &&
+                    <Grid item xs={12}>
                         <Button
                             variant='contained'
-                            onClick={onCreateHandler}
+                            onClick={() => parentContext.setMagicSkills([...parentContext.magicSkills, {'skill': null}])}
+                            disabled={isDisabled()}
                         >
-                            Create
+                            Add Magic Skill
                         </Button>
-                    }
+                    </Grid>
 
-                    {action === 'view' && !parentContext.isDeleted &&
-                        <>
+                    <Grid item xs={12}>
+                        Interested in Courses:
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CoursesMultiSelect
+                            courses={parentContext.courses}
+                            value={parentContext.courses}
+                            onChangeHandler={(e) => parentContext.setCourses(e.target.value)}
+                            disabled={isDisabled()}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} container justify='flex-end' spacing={12}>
+                        {action === 'create' &&
                             <Button
                                 variant='contained'
-                                onClick={() => setAction('edit')}
+                                onClick={onCreateHandler}
+                                color='primary'
                             >
-                                Edit
+                                Create
+                            </Button>
+                        }
+
+                        {action === 'view' && !parentContext.isDeleted &&
+                            <>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => setAction('edit')}
+                                    color='primary'
+                                    style={{marginRight: 18}}
+                                >
+                                    Edit
                                 </Button>
-                            <Button
-                                variant='contained'
-                                onClick={(e) => {
-                                    setIsLoading(true);
-                                    onDeleteHandler(e);
-                                    setIsLoading(false);
-                                }}
-                            >
-                                Delete
-                            </Button>
-                        </>
-                    }
+                                <Button
+                                    variant='contained'
+                                    color='secondary'
+                                    onClick={(e) => {
+                                        setIsLoading(true);
+                                        onDeleteHandler(e);
+                                        setIsLoading(false);
+                                    }}
+                                >
+                                    Delete
+                                </Button>
+                            </>
+                        }
 
-                    {action === 'edit' &&
-                        <>
-                            <Button
-                                variant='contained'
-                                onClick={onCancelHander}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant='contained'
-                                onClick={(e) => {
-                                    setIsLoading(true);
-                                    onEditHandler(e);
-                                    setAction('view');
-                                    setIsLoading(false);
-                                }}
-                            >
-                                Save
-                            </Button>
-                        </>
-                    }
+                        {action === 'edit' &&
+                            <>
+                                <Button
+                                    variant='contained'
+                                    onClick={onCancelHander}
+                                    color='secondary'
+                                    style={{marginRight: 18}}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={(e) => {
+                                        setIsLoading(true);
+                                        onEditHandler(e);
+                                        setAction('view');
+                                        setIsLoading(false);
+                                    }}
+                                >
+                                    Save
+                                </Button>
+                            </>
+                        }
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        {parentContext.formMessage.status &&
+                            <div className={parentContext.formMessage.status}>
+                                {parentContext.formMessage.message}
+                            </div>
+                        }
+                    </Grid>
+
                 </Grid>
-
-                <Grid item xs={12}>
-                    {parentContext.formMessage.status &&
-                        <div className={parentContext.formMessage.status}>
-                            {parentContext.formMessage.message}
-                        </div>
-                    }
-                </Grid>
-
-            </Grid>
+            }
         </form>
     );
 }

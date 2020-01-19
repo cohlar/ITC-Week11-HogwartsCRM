@@ -26,10 +26,17 @@ function Students() {
             setStudents(response.data);
         }
         catch (error) {
-            setFormMessage({
-                'status': 'error',
-                'message': parseErrorMessage(error.response.data)
-            });
+            if (error.response && error.response.data) {
+                setFormMessage({
+                    'status': 'error',
+                    'message': parseErrorMessage(error.response.data)
+                });
+            } else {
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Server is down, please try again later.'
+                });
+            }
         }
         setIsLoading(false);
     }
@@ -52,9 +59,7 @@ function Students() {
     return (
         <main>
             {isLoading &&
-                <>
-                    Loading...
-                </>
+                <div className='loader'></div>
             }
             {!isLoading && students.length > 0 &&
                 <StudentsList

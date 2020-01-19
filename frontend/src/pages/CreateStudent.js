@@ -45,7 +45,14 @@ function CreateStudent() {
             resetState();
         }
         catch (error) {
-            setTempMessage('error', parseErrorMessage(error.response.data));
+            if (error.response && error.response.data) {
+                setTempMessage('error', parseErrorMessage(error.response.data));
+            } else {
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Server is down, please try again later.'
+                });
+            }
         }
     }
 

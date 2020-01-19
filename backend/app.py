@@ -1,4 +1,4 @@
-import logging
+import logging, os
 from datetime import datetime
 from flask import Flask, request, abort, jsonify, render_template
 from sqlalchemy import func
@@ -216,4 +216,5 @@ def getstudentcourses():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

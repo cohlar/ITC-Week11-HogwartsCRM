@@ -28,7 +28,11 @@ function MagicSkillForm(props) {
                 setStaticMagicSkills(response.data);
             }
             catch (error) {
-                setErrorMessage(parseErrorMessage(error.response.data));
+                if (error.response && error.response.data) {
+                    setErrorMessage(parseErrorMessage(error.response.data));
+                } else {
+                    setErrorMessage('Server is down, please try again later.');
+                }
             }
         })();
     }, [])

@@ -28,7 +28,11 @@ function Dashboard() {
                 setStudentCourses(response.studentCourses.data);
             }
             catch (error) {
-                setErrorMessage(parseErrorMessage(error.response.data));
+                if (error.response && error.response.data) {
+                    setErrorMessage(parseErrorMessage(error.response.data));
+                } else {
+                    setErrorMessage('Server is down, please try again later.');
+                }
             }
             setIsLoading(false);
         })();
@@ -47,7 +51,10 @@ function Dashboard() {
                     <br />
                 </>
             }
-            {!errorMessage &&
+            {isLoading &&
+                <div className='loader'></div>
+            }
+            {!errorMessage && !isLoading &&
                 <>
                     <LineChart
                         data={studentsByDay}

@@ -8,7 +8,7 @@ import { getParameterByName, parseErrorMessage } from '../lib/utils.js';
 function StudentProfile() {
     const { id } = useParams();
     const location = useLocation();
-    const action = ( getParameterByName('action', location.search) ) ? getParameterByName('action', location.search) : 'view';
+    const action = (getParameterByName('action', location.search)) ? getParameterByName('action', location.search) : 'view';
 
     const [isLoading, setIsLoading] = useState(false);
     const [firstname, setFirstname] = useState('');
@@ -53,7 +53,14 @@ function StudentProfile() {
             setTempMessage('success', 'Student has been successfully updated in the database.');
         }
         catch (error) {
-            setTempMessage('error', parseErrorMessage(error.response.data));
+            if (error.response && error.response.data) {
+                setTempMessage('error', parseErrorMessage(error.response.data));
+            } else {
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Server is down, please try again later.'
+                });
+            }
         }
     }
 
@@ -65,7 +72,14 @@ function StudentProfile() {
             setTempMessage('success', 'Student has been successfully deleted from the database.');
         }
         catch (error) {
-            setTempMessage('error', parseErrorMessage(error.response.data));
+            if (error.response && error.response.data) {
+                setTempMessage('error', parseErrorMessage(error.response.data));
+            } else {
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Server is down, please try again later.'
+                });
+            }
         }
     }
 
@@ -76,7 +90,14 @@ function StudentProfile() {
             setStudent(myStudent);
         }
         catch (error) {
-            setTempMessage('error', parseErrorMessage(error.response.data));
+            if (error.response && error.response.data) {
+                setTempMessage('error', parseErrorMessage(error.response.data));
+            } else {
+                setFormMessage({
+                    'status': 'error',
+                    'message': 'Server is down, please try again later.'
+                });
+            }
         }
     }
 
@@ -91,7 +112,7 @@ function StudentProfile() {
             catch (error) {
                 setFormMessage({
                     'status': 'error',
-                    'message': 'Student profile could not be loaded due to the following server error: ' + console.log(parseErrorMessage(error.response.data))
+                    'message': 'Student profile could not be loaded'
                 });
             }
             setIsLoading(false);
@@ -101,9 +122,7 @@ function StudentProfile() {
     return (
         <main>
             {isLoading &&
-                <>
-                    Loading...
-                </>
+                <div className='loader'></div>
             }
             {!isLoading &&
                 <StudentContext.Provider value={stateContext}>

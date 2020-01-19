@@ -134,3 +134,24 @@ main .error {
 .margin-top {
   margin-top: 8px;
 }
+
+.loader {
+  width: 200px;
+  height: 100%;
+  align-self: center;
+  background: url('./img/loader.png') no-repeat;
+  background-size: contain;
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+}
+
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
+  }
+}
