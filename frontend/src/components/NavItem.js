@@ -5,12 +5,10 @@ function NavItem(props) {
     const { name, imgName, path, disabled } = props;
     return (
         <NavLink
-            exact to={path}
-            className={ disabled ? 'disabled nav-element' : 'nav-element'}
-            onClick={(e) => {
-                disabled && e.preventDefault();
-                document.getElementById('/student-profile').classList.remove('active');
-            }}
+            to={path}
+            className={disabled ? 'disabled nav-element' : 'nav-element'}
+            activeClassName='active'
+            onClick={(e) => disabled && e.preventDefault()}
             id={path}
         >
             <img

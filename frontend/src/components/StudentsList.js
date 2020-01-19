@@ -53,14 +53,12 @@ function StudentsList(props) {
                                 <NavLink
                                     to={'/student-profile/' + student.id}
                                     className='action-icon view'
-                                    onClick={() => document.getElementById('/student-profile').classList.add('active')}
                                 >
                                     <ViewIcon />
                                 </NavLink>
                                 <NavLink
                                     to={'/student-profile/' + student.id + '?action=edit'}
                                     className='action-icon edit'
-                                    onClick={() => document.getElementById('/student-profile').classList.add('active')}
                                 >
                                     <EditIcon />
                                 </NavLink>
