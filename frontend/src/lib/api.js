@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://127.0.0.1:5000/';
+const baseUrl = 'https://glacial-atoll-81161.herokuapp.com/';
 
 export function getMagicSkills() {
     const apiPath = 'api/magicskills';
