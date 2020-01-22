@@ -6,7 +6,7 @@ function NavItem(props) {
     return (
         <NavLink
             to={path}
-            className={disabled ? 'disabled nav-element' : 'nav-element'}
+            className={disabled ? 'disabled nav-element`' : 'nav-element'}
             activeClassName='active'
             onClick={(e) => disabled && e.preventDefault()}
             id={path}
